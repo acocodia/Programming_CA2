@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Grand Azure Hotel{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Grand Azure</span>
+            </div>
+            <span class="logo-subtitle">Hotel Management</span>
+        </div>
+        
+        <div class="nav-section">
+            <span class="nav-label">Main</span>
+            <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                <span class="nav-icon">◫</span>
+                Dashboard
+            </a>
+        </div>
+        
+        <div class="nav-section">
+            <span class="nav-label">Management</span>
+            <a href="{{ url_for('rooms') }}" class="nav-link {% if 'room' in request.endpoint %}active{% endif %}">
+                <span class="nav-icon">⌂</span>
+                Rooms
+            </a>
+            <a href="{{ url_for('guests') }}" class="nav-link {% if 'guest' in request.endpoint %}active{% endif %}">
+                <span class="nav-icon">◉</span>
+                Guests
+            </a>
+            <a href="{{ url_for('bookings') }}" class="nav-link {% if 'booking' in request.endpoint %}active{% endif %}">
+                <span class="nav-icon">▤</span>
+                Bookings
+            </a>
+            <a href="{{ url_for('payments') }}" class="nav-link {% if 'payment' in request.endpoint %}active{% endif %}">
+                <span class="nav-icon">◈</span>
+                Payments
+            </a>
+        </div>
+        
+        {% if current_user.role == 'admin' %}
+        <div class="nav-section">
+            <span class="nav-label">Admin</span>
+            <a href="{{ url_for('users') }}" class="nav-link {% if 'user' in request.endpoint %}active{% endif %}">
+                <span class="nav-icon">⬡</span>
+                Users
+            </a>
+        </div>
+        {% endif %}
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <span class="user-avatar">{{ current_user.username[0].upper() }}</span>
+                <div class="user-details">
+                    <span class="user-name">{{ current_user.username }}</span>
+                    <span class="user-role">{{ current_user.role.title() }}</span>
+                </div>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Sign Out</a>
+        </div>
+    </nav>
+    {% endif %}
+    
+    <main class="main-content {% if not current_user.is_authenticated %}full-width{% endif %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            <span>{{ message }}</span>
+                            <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+

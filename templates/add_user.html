@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Add User - Grand Azure Hotel{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="{{ url_for('users') }}" class="back-link">← Back to Users</a>
+        <h1>Add New User</h1>
+        <p class="page-subtitle">Create a new system user</p>
+    </div>
+</div>
+
+<div class="form-card">
+    <form method="POST" class="styled-form">
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" required placeholder="Enter username">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" required placeholder="Enter password">
+        </div>
+        
+        <div class="form-group">
+            <label for="role">Role *</label>
+            <select id="role" name="role" required>
+                <option value="">Select role</option>
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+            </select>
+            <span class="form-hint">Admin can manage rooms and users. Staff can manage guests, bookings, and payments.</span>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{{ url_for('users') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Create User</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

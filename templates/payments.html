@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Payments - Grand Azure Hotel{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Payments</h1>
+        <p class="page-subtitle">View all payment transactions</p>
+    </div>
+</div>
+
+<div class="table-container">
+    {% if payments %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Booking</th>
+                <th>Guest</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Status</th>
+                <th>Transaction ID</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td><span class="payment-id">#{{ payment.id }}</span></td>
+                <td>
+                    <a href="{{ url_for('view_booking', id=payment.booking_id) }}" class="booking-link">
+                        Booking #{{ payment.booking_id }}
+                    </a>
+                </td>
+                <td>{{ payment.booking.guest.name }}</td>
+                <td><span class="amount">${{ "%.2f"|format(payment.amount) }}</span></td>
+                <td>
+                    <span class="method-badge method-{{ payment.payment_method }}">
+                        {{ payment.payment_method.title() }}
+                    </span>
+                </td>
+                <td><span class="status-badge status-{{ payment.payment_status }}">{{ payment.payment_status.title() }}</span></td>
+                <td>{{ payment.transaction_id or '-' }}</td>
+                <td>{{ payment.created_at.strftime('%b %d, %Y %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state-full">
+        <span class="empty-icon">◈</span>
+        <h3>No payments found</h3>
+        <p>Payment records will appear here</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Grand Azure Hotel{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Dashboard</h1>
+        <p class="page-subtitle">Welcome back, {{ current_user.username }}</p>
+    </div>
+    <div class="header-date">
+        <span class="date-icon">◷</span>
+        <span>{{ now().strftime('%A, %B %d, %Y') if now is defined else 'Today' }}</span>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card stat-primary">
+        <div class="stat-icon">⌂</div>
+        <div class="stat-content">
+            <span class="stat-value">{{ total_rooms }}</span>
+            <span class="stat-label">Total Rooms</span>
+        </div>
+    </div>
+    
+    <div class="stat-card stat-success">
+        <div class="stat-icon">✓</div>
+        <div class="stat-content">
+            <span class="stat-value">{{ available_rooms }}</span>
+            <span class="stat-label">Available</span>
+        </div>
+    </div>
+    
+    <div class="stat-card stat-warning">
+        <div class="stat-icon">◉</div>
+        <div class="stat-content">
+            <span class="stat-value">{{ occupied_rooms }}</span>
+            <span class="stat-label">Occupied</span>
+        </div>
+    </div>
+    
+    <div class="stat-card stat-info">
+        <div class="stat-icon">▤</div>
+        <div class="stat-content">
+            <span class="stat-value">{{ active_bookings }}</span>
+            <span class="stat-label">Active Bookings</span>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3>Today's Activity</h3>
+        </div>
+        <div class="activity-stats">
+            <div class="activity-item">
+                <span class="activity-icon checkin">↓</span>
+                <div class="activity-info">
+                    <span class="activity-value">{{ today_checkins }}</span>
+                    <span class="activity-label">Check-ins Today</span>
+                </div>
+            </div>
+            <div class="activity-item">
+                <span class="activity-icon checkout">↑</span>
+                <div class="activity-info">
+                    <span class="activity-value">{{ today_checkouts }}</span>
+                    <span class="activity-label">Check-outs Today</span>
+                </div>
+            </div>
+            <div class="activity-item">
+                <span class="activity-icon guests">◉</span>
+                <div class="activity-info">
+                    <span class="activity-value">{{ total_guests }}</span>
+                    <span class="activity-label">Total Guests</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3>Recent Bookings</h3>
+            <a href="{{ url_for('bookings') }}" class="card-link">View All →</a>
+        </div>
+        <div class="recent-list">
+            {% if recent_bookings %}
+                {% for booking in recent_bookings %}
+                <div class="recent-item">
+                    <div class="recent-info">
+                        <span class="recent-primary">{{ booking.guest.name }}</span>
+                        <span class="recent-secondary">Room {{ booking.room.room_number }}</span>
+                    </div>
+                    <span class="status-badge status-{{ booking.status }}">{{ booking.status }}</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>No recent bookings</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <h3>Quick Actions</h3>
+    <div class="actions-grid">
+        <a href="{{ url_for('add_booking') }}" class="action-card">
+            <span class="action-icon">+</span>
+            <span class="action-label">New Booking</span>
+        </a>
+        <a href="{{ url_for('add_guest') }}" class="action-card">
+            <span class="action-icon">◉</span>
+            <span class="action-label">Add Guest</span>
+        </a>
+        {% if current_user.role == 'admin' %}
+        <a href="{{ url_for('add_room') }}" class="action-card">
+            <span class="action-icon">⌂</span>
+            <span class="action-label">Add Room</span>
+        </a>
+        {% endif %}
+        <a href="{{ url_for('rooms') }}" class="action-card">
+            <span class="action-icon">◫</span>
+            <span class="action-label">View Rooms</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+

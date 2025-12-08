@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}New Booking - Grand Azure Hotel{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="{{ url_for('bookings') }}" class="back-link">← Back to Bookings</a>
+        <h1>Create New Booking</h1>
+        <p class="page-subtitle">Reserve a room for a guest</p>
+    </div>
+</div>
+
+<div class="form-card">
+    <form method="POST" class="styled-form" id="booking-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="guest_id">Guest *</label>
+                <select id="guest_id" name="guest_id" required>
+                    <option value="">Select guest</option>
+                    {% for guest in guests %}
+                    <option value="{{ guest.id }}">{{ guest.name }} ({{ guest.phone }})</option>
+                    {% endfor %}
+                </select>
+                <a href="{{ url_for('add_guest') }}" class="form-hint-link">+ Add new guest</a>
+            </div>
+            <div class="form-group">
+                <label for="room_id">Room *</label>
+                <select id="room_id" name="room_id" required>
+                    <option value="">Select room</option>
+                    {% for room in rooms %}
+                    <option value="{{ room.id }}" data-price="{{ room.price_per_night }}">
+                        {{ room.room_number }} - {{ room.room_type.title() }} (${{ "%.2f"|format(room.price_per_night) }}/night)
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="check_in_date">Check-In Date *</label>
+                <input type="date" id="check_in_date" name="check_in_date" required>
+            </div>
+            <div class="form-group">
+                <label for="check_out_date">Check-Out Date *</label>
+                <input type="date" id="check_out_date" name="check_out_date" required>
+            </div>
+        </div>
+        
+        <div class="booking-summary" id="booking-summary" style="display: none;">
+            <h4>Booking Summary</h4>
+            <div class="summary-row">
+                <span>Number of Nights:</span>
+                <span id="nights-count">0</span>
+            </div>
+            <div class="summary-row">
+                <span>Price per Night:</span>
+                <span id="price-per-night">$0.00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total Amount:</span>
+                <span id="total-amount">$0.00</span>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="special_requests">Special Requests</label>
+            <textarea id="special_requests" name="special_requests" rows="3" placeholder="Any special requests or notes..."></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{{ url_for('bookings') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Create Booking</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

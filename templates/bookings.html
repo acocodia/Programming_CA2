@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Bookings - Grand Azure Hotel{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Bookings</h1>
+        <p class="page-subtitle">Manage reservations and bookings</p>
+    </div>
+    <a href="{{ url_for('add_booking') }}" class="btn btn-primary">
+        <span>+</span> New Booking
+    </a>
+</div>
+
+<div class="filter-bar">
+    <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="confirmed">Confirmed</button>
+        <button class="filter-btn" data-filter="checked_in">Checked In</button>
+        <button class="filter-btn" data-filter="checked_out">Checked Out</button>
+        <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+    </div>
+</div>
+
+<div class="table-container">
+    {% if bookings %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr data-status="{{ booking.status }}">
+                <td><span class="booking-id">#{{ booking.id }}</span></td>
+                <td>
+                    <div class="guest-name">
+                        <span class="guest-avatar">{{ booking.guest.name[0].upper() }}</span>
+                        {{ booking.guest.name }}
+                    </div>
+                </td>
+                <td>
+                    <span class="room-badge">{{ booking.room.room_number }}</span>
+                    <span class="room-type-small">{{ booking.room.room_type.title() }}</span>
+                </td>
+                <td>{{ booking.check_in_date.strftime('%b %d, %Y') }}</td>
+                <td>{{ booking.check_out_date.strftime('%b %d, %Y') }}</td>
+                <td><span class="amount">${{ "%.2f"|format(booking.total_amount or 0) }}</span></td>
+                <td><span class="status-badge status-{{ booking.status }}">{{ booking.status.replace('_', ' ').title() }}</span></td>
+                <td class="actions-cell">
+                    <a href="{{ url_for('view_booking', id=booking.id) }}" class="btn btn-secondary btn-sm">View</a>
+                    {% if booking.status == 'confirmed' %}
+                    <a href="{{ url_for('check_in', booking_id=booking.id) }}" class="btn btn-success btn-sm" onclick="return confirm('Check in this guest?')">Check In</a>
+                    <a href="{{ url_for('cancel_booking', id=booking.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Cancel this booking?')">Cancel</a>
+                    {% elif booking.status == 'checked_in' %}
+                    <a href="{{ url_for('check_out', booking_id=booking.id) }}" class="btn btn-warning btn-sm" onclick="return confirm('Check out this guest?')">Check Out</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state-full">
+        <span class="empty-icon">▤</span>
+        <h3>No bookings found</h3>
+        <p>Create your first booking</p>
+        <a href="{{ url_for('add_booking') }}" class="btn btn-primary">New Booking</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

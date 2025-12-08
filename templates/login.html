@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Grand Azure Hotel{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-backdrop"></div>
+    <div class="login-card">
+        <div class="login-header">
+            <span class="login-logo">◆</span>
+            <h1>Grand Azure</h1>
+            <p>Hotel Management System</p>
+        </div>
+        
+        <form method="POST" class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username" placeholder="Enter your username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">
+                Sign In
+            </button>
+        </form>
+        
+        <div class="login-footer">
+            <p>Default credentials:</p>
+            <p><strong>Admin:</strong> admin / admin123</p>
+            <p><strong>Staff:</strong> staff / staff123</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
