@@ -1,14 +1,14 @@
 // Grand Azure Hotel - Management System JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all features
+  
     initDateInputs();
     initBookingCalculator();
     initFilterButtons();
     initFlashMessages();
 });
 
-// Set minimum date for date inputs to today
+
 function initDateInputs() {
     const today = new Date().toISOString().split('T')[0];
     const checkInInput = document.getElementById('check_in_date');
@@ -33,7 +33,7 @@ function initDateInputs() {
     }
 }
 
-// Calculate booking total
+
 function initBookingCalculator() {
     const roomSelect = document.getElementById('room_id');
     
@@ -69,7 +69,7 @@ function updateBookingSummary() {
     }
 }
 
-// Filter buttons for rooms and bookings
+
 function initFilterButtons() {
     const filterBtns = document.querySelectorAll('.filter-btn');
     
@@ -77,11 +77,11 @@ function initFilterButtons() {
         btn.addEventListener('click', function() {
             const filter = this.dataset.filter;
             
-            // Update active state
+           
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Filter items (rooms or table rows)
+            
             const roomCards = document.querySelectorAll('.room-card');
             const tableRows = document.querySelectorAll('tbody tr[data-status]');
             
@@ -108,7 +108,7 @@ function initFilterButtons() {
     });
 }
 
-// Auto-dismiss flash messages
+
 function initFlashMessages() {
     const flashMessages = document.querySelectorAll('.flash-message');
     
@@ -120,7 +120,7 @@ function initFlashMessages() {
     });
 }
 
-// Add slideOut animation
+
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideOut {

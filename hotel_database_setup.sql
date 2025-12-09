@@ -1,11 +1,8 @@
--- Hotel Management System - MySQL Database Setup
--- Run this script to create the database and tables
 
--- Create database
 CREATE DATABASE IF NOT EXISTS hotel_management;
 USE hotel_management;
 
--- Users table
+
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(80) NOT NULL UNIQUE,
@@ -14,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Rooms table
+
 CREATE TABLE IF NOT EXISTS rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     room_number VARCHAR(10) NOT NULL UNIQUE,
@@ -27,7 +24,7 @@ CREATE TABLE IF NOT EXISTS rooms (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Guests table
+
 CREATE TABLE IF NOT EXISTS guests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -38,7 +35,7 @@ CREATE TABLE IF NOT EXISTS guests (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Bookings table
+
 CREATE TABLE IF NOT EXISTS bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     room_id INT NOT NULL,
@@ -55,7 +52,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY (guest_id) REFERENCES guests(id) ON DELETE CASCADE
 );
 
--- Payments table
+
 CREATE TABLE IF NOT EXISTS payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
@@ -68,15 +65,7 @@ CREATE TABLE IF NOT EXISTS payments (
     FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
 );
 
--- Insert default users (password hashes for 'admin123' and 'staff123')
--- These will be created by the Flask app on first run
--- But you can insert them manually if needed:
 
--- INSERT INTO users (username, password, role) VALUES 
--- ('admin', 'scrypt:32768:8:1$...', 'admin'),
--- ('staff', 'scrypt:32768:8:1$...', 'staff');
-
--- Create indexes for better performance
 CREATE INDEX idx_rooms_status ON rooms(status);
 CREATE INDEX idx_bookings_status ON bookings(status);
 CREATE INDEX idx_bookings_dates ON bookings(check_in_date, check_out_date);

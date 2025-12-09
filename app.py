@@ -8,11 +8,10 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hotel-management-secret-key-2024'
 
-# MySQL Database Configuration
-# Update these settings with your MySQL credentials
+
 MYSQL_HOST = 'localhost'
 MYSQL_USER = 'root'
-MYSQL_PASSWORD = 'root'  # Add your MySQL password here
+MYSQL_PASSWORD = ''  
 MYSQL_DATABASE = 'hotel_management'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
@@ -27,12 +26,12 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Initialize database and create default users
+
 def init_db():
     with app.app_context():
         db.create_all()
         
-        # Create default admin and staff users if they don't exist
+      
         if not User.query.filter_by(username='admin').first():
             admin = User(
                 username='admin',
@@ -51,7 +50,7 @@ def init_db():
         
         db.session.commit()
 
-# Authentication Routes
+
 @app.route('/')
 def index():
     if current_user.is_authenticated:
@@ -116,7 +115,7 @@ def dashboard():
         recent_bookings=recent_bookings
     )
 
-# Room Management Routes
+
 @app.route('/rooms')
 @login_required
 def rooms():
@@ -199,7 +198,7 @@ def delete_room(id):
     
     return redirect(url_for('rooms'))
 
-# Guest Management Routes
+
 @app.route('/guests')
 @login_required
 def guests():
@@ -266,7 +265,7 @@ def delete_guest(id):
     
     return redirect(url_for('guests'))
 
-# Booking Management Routes
+
 @app.route('/bookings')
 @login_required
 def bookings():
@@ -343,7 +342,7 @@ def cancel_booking(id):
     
     return redirect(url_for('bookings'))
 
-# Check-In / Check-Out Routes
+
 @app.route('/checkin/<int:booking_id>')
 @login_required
 def check_in(booking_id):
@@ -388,7 +387,7 @@ def check_out(booking_id):
     
     return redirect(url_for('bookings'))
 
-# Payment Routes
+
 @app.route('/payments')
 @login_required
 def payments():
@@ -421,7 +420,7 @@ def add_payment(booking_id):
     
     return render_template('add_payment.html', booking=booking)
 
-# User Management Routes (Admin only)
+
 @app.route('/users')
 @login_required
 def users():
