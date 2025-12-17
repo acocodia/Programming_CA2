@@ -84,7 +84,7 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
-# Dashboard
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -103,6 +103,7 @@ def dashboard():
     ).count()
     
     recent_bookings = Booking.query.order_by(Booking.created_at.desc()).limit(5).all()
+    
     
     return render_template('dashboard.html',
         total_rooms=total_rooms,
